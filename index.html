@@ -3,26 +3,61 @@
 <html lang="en-US">
   <head>
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link rel="icon" href="icon.png" type="image/gif">
+    <link rel="icon" href="icons/webicon.png" type="image/gif">
     <link rel="stylesheet" href="https://necolas.github.io/normalize.css/8.0.1/normalize.css">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&display=swap" rel="stylesheet">
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Steve Xue</title>
+    <canvas id="myCanvas"></canvas>
   </head>
   <body>
+    <!-- <img class="icon" src="icons/dark-button.svg" alt="button" onclick="toggletheme()"> -->
     <div class="container">
+      <img class="icon" id="themebutton" src="icons/dark-button.svg" alt="button" onclick="toggletheme()" title="Toggle Theme">
       <h1 id="heading">Hello! I'm Steve!</h1>
       <p class="description">I am a Computer Science Student from Brooklyn, New York. I am currently learning Java. Check out my Github for my latest projects and interests.</p>
       <div class="links">
         <a class="link" href="https://github.com/SteveX0101" target="_blank">
-          <img class="icon" src="githubicon.svg" alt="github">
+          <img class="icon" src="icons/github-dark.svg" alt="github" title="Github">
         </a>
         <a class="link" href="mailto:xstevexue@gmail.com">
-          <img class="icon" src="emailicon.svg" alt="email">
+          <img class="icon" src="icons/email-dark.svg" alt="email" title="Email">
         </a>
       </div>
     </div>
+    <script>
+      const canvas = document.getElementById("myCanvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      let darktheme = true;
+
+      function toggletheme() {
+        if (darktheme) {
+          //Light theme
+          document.body.style.backgroundColor = "#F2FFFF"; //BG color
+          document.getElementById('heading').style.color = "#191919"; //Heading text color
+          document.getElementById('heading').style.textShadow = "3px 5px #009F71"; //Heading text shadow color
+          document.getElementsByClassName("description")[0].style.color = "#3D5866"; //Description color
+          document.getElementsByClassName('icon')[1].src = "/icons/github-light.svg"; //Github icon
+          document.getElementsByClassName('icon')[2].src = "/icons/email-light.svg"; //Email icon
+          document.getElementsByClassName('icon')[0].src = "/icons/light-button.svg" //Change theme icon
+          darktheme = false;
+        } else {
+          //Default dark theme
+          document.body.style.backgroundColor = "#201F25"; //BG color
+          document.getElementById('heading').style.color = "#FFFFFF"; //Heading text color
+          document.getElementById('heading').style.textShadow = "3px 5px #9985FF"; //Heading text shadow color
+          document.getElementsByClassName("description")[0].style.color = "#F5FFFA"; //Description color
+          document.getElementsByClassName('icon')[1].src = "/icons/github-dark.svg"; //Github icon
+          document.getElementsByClassName('icon')[2].src = "/icons/email-dark.svg"; //Email icon
+          document.getElementsByClassName('icon')[0].src = "/icons/dark-button.svg"; //Change theme icon
+          darktheme = true;
+        }
+      }
+    </script>
   </body>
 </html>

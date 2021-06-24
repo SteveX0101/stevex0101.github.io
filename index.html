@@ -8,12 +8,11 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&display=swap" rel="stylesheet">
-    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=0.8">
     <title>Steve Xue</title>
     <canvas id="myCanvas"></canvas>
   </head>
   <body>
-    <!-- <img class="icon" src="icons/dark-button.svg" alt="button" onclick="toggletheme()"> -->
     <div class="container">
       <img class="icon" id="themebutton" src="icons/dark-button.svg" alt="button" onclick="toggletheme()" title="Toggle Theme">
       <h1 id="heading">Hello! I'm Steve!</h1>
@@ -28,12 +27,103 @@
       </div>
     </div>
     <script>
-      const canvas = document.getElementById("myCanvas");
-      const ctx = canvas.getContext("2d");
+      var canvas = document.getElementById("myCanvas");
+      var ctx = canvas.getContext("2d");
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
 
-      let darktheme = true;
+      let darktheme = true,
+          dark = "#9985FF",
+          light = "#009F71",
+          particlesArray;
+
+      class Particle {
+        constructor(){
+          this.reset()
+        }
+
+        draw(){
+          ctx.fillStyle = this.pcolor;
+          ctx.globalAlpha = this.opacity;
+          ctx.beginPath();
+          ctx.arc(this.px,this.py,this.psize,0,2 * Math.PI);
+          ctx.closePath();
+          ctx.fill();
+        }
+
+        reset(){
+          this.psize = getRandomInt(2,6);
+          this.px = getRandomInt(this.psize * 2,canvas.width - (this.psize * 2));
+          this.py = getRandomInt(this.psize * 2,canvas.height - (this.psize * 2));
+          this.opacity = (Math.random() * (0.8 - 0.5)) + 0.5;
+          this.pcolor = (Math.random() * (1 - 0.8)) + 0.8;
+          this.decay = (Math.random() * (1 - 0.8)) + 0.8;
+          this.movementX = (Math.random() < .5) ? -1 : 1;
+          this.movementY = (Math.random() < .5) ? -1 : 1;
+          this.psizerate = 0.4 * this.decay * getRandom(0.5,1);
+        }
+
+        update(){
+          this.pcolor = (darktheme) ? dark : light;
+          if (this.px >= canvas.width || this.px <= 0) {
+            this.movementX *= -1;
+          }
+          if (this.py >= canvas.height || this.py <= 0) {
+            this.movementY *= -1;
+          }
+
+          if (this.opacity > 0) {
+            this.opacity -= 0.002 * this.decay;
+            this.opacity = (this.opacity < 0) ? 0 : this.opacity;
+            this.psize += this.psizerate;
+            this.px += 0.6 * this.movementX;
+            this.py += 0.6 * this.movementY;
+          } else if (this.opacity == 0) {
+            this.reset();
+          }
+          this.draw();
+        }
+      }
+
+      function getRandom(min, max) {
+        return ((Math.random() * (max - min)) + min);
+      }
+
+      function getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min) + min);
+      }
+
+      function init() {
+        particlesArray = [];
+        let numOfparticles = Math.floor((canvas.width * canvas.height) / 100000);
+        for (let i = 0; i < numOfparticles; ++i) {
+          particlesArray.push(new Particle());
+        }
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        for (let i = 0; i < particlesArray.length; i++) {
+          particlesArray[i].update();
+        }
+      }
+
+      function reportWindowSize() {
+        canvas = document.getElementById("myCanvas");
+        ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        init();
+      }
+
+      window.onresize = reportWindowSize;
+
+      init();
+      animate();
 
       function toggletheme() {
         if (darktheme) {

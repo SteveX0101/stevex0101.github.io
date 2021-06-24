@@ -18,11 +18,12 @@ body {
 
 #myCanvas {
   /* background-color: pink; */
-  position:absolute;
+  position: absolute;
+  opacity: 0.6;
   left:0px;
   top:0px;
-  height: 100%;
-  width: 100%;
+  height: auto;
+  width: auto;
   z-index: -1;
 }
 
@@ -39,6 +40,7 @@ body {
 
 #themebutton {
   position:absolute;
+  margin: 16px;
   left:0px;
   top:0px;
 }

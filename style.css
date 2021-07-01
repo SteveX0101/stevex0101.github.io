@@ -17,9 +17,8 @@ body {
 }
 
 #myCanvas {
-  /* background-color: pink; */
   position: absolute;
-  opacity: 0.6;
+  opacity: 1;
   left:0px;
   top:0px;
   height: auto;
@@ -60,7 +59,7 @@ body {
 }
 
 .icon:hover {
-  transform: scale(1.3);
+  transform: scale(1.4);
 }
 
 .container {
@@ -73,9 +72,6 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 

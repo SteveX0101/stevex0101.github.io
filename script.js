@@ -6,10 +6,12 @@ canvas.height = window.innerHeight;
 //Initializes variables
 let darktheme = true, //Default is dark theme
     color = [/*dark     light*/
-            ["#201F25", "#F2FFFF"], //background
-            ["#FFFFFF", "#191919"], //heading color
-            ["#9985FF", "#009F71"], //heading shadow color
-            ["#F5FFFA", "#3D5866"]  //description color
+            ["#440066", "#F2FFFF"], //Background "Light"
+            ["#201F25", "#B5FFEA"], //Background "Dark"
+            ["#FFFFFF", "#191919"], //Heading color
+            ["#9985FF", "#009F71"], //Heading shadow color
+            ["#F5FFFA", "#3D5866"],  //Description color
+            ["#60539F", "#006347"] //Particle color
             ],
     particlesArray;
 
@@ -17,12 +19,14 @@ let darktheme = true, //Default is dark theme
 class Particle {
   constructor() {
     this.reset();
+    this.particleOpacity = getRandom(0.001,1);
+    this.particleYpos = getRandomInt(0,canvas.height + canvas.height/4);
   }
 
   //Resets the particle values
   reset() {
-    this.particleColor = (darktheme) ? color[2][0] : color[2][1];
-    this.particleOpacity = getRandom(0.5,1);
+    this.particleColor = (darktheme) ? color[5][0] : color[5][1];
+    this.particleOpacity = getRandom(0.05,1);
     this.particleFadeRate = getRandom(0.002,0.0008);
     this.particleSize = getRandomInt(canvas.height/46,canvas.height/18);
     this.particleXpos = getRandomInt(this.particleSize, canvas.width - this.particleSize);
@@ -46,15 +50,14 @@ class Particle {
 
   //Updates the particle
   update() {
-    this.particleColor = (darktheme) ? color[2][0] : color[2][1]; //Theme color
+    this.particleColor = (darktheme) ? color[5][0] : color[5][1]; //Theme color
     this.particleYpos -= this.particleYRate; //Makes the particle rise
 
     //Increase particle size slightly
     this.particleSize += 0.002;
 
     //Makes the Particle Zig-Zag
-    this.particleXpos += Math.sin(this.particleCounter * (Math.PI / 180)) / (this.particleSize / 10) * this.particleXdirection;
-    ++this.particleCounter;
+    this.particleXpos += Math.sin(this.particleCounter++ * (Math.PI / 180)) / (this.particleSize / 10) * this.particleXdirection;
 
     //Particle will bounce off the sides
     if (this.particleXpos + this.particleSize >= canvas.width || this.particleXpos - this.particleSize <= 0) {
@@ -80,7 +83,7 @@ class Particle {
 //Initialize the particles
 function init() {
   particlesArray = [];
-  let particleCount = Math.ceil(canvas.width/96) + 2; //Initialize the number of particles
+  let particleCount = Math.ceil(canvas.width/96) + 4; //Initialize the number of particles
 
   //Pushes a particle object into the particle array
   for(let i = 0; i < particleCount; ++i) {
@@ -112,19 +115,9 @@ function getRandomInt(min, max) {
 
 //Returns a random value between two value and rounded with the highest decimal point
 function getRandom(min, max) {
-  var highestDecimalpoint = maxValue(decimalCount(min),decimalCount(max));
+  var highestDecimalpoint = Math.max(decimalCount(min),decimalCount(max));
   var roundAmount = Math.pow(10,highestDecimalpoint);
   return (Math.round(((Math.random() * (max - min)) + min) * roundAmount) / roundAmount);
-}
-
-//Returns the smallest value between two values
-function minValue(value1,value2) {
-  return (value1 < value2) ? value1 : value2;
-}
-
-//Returns the largest value between two values
-function maxValue(value1,value2) {
-  return (value1 > value2) ? value1 : value2;
 }
 
 //Returns the number of decimal point a value has
@@ -147,13 +140,15 @@ function reportWindowSize() {
 
 //Changes the colors depending on the theme
 function theme() {
-    document.body.style.backgroundColor = (darktheme) ? color[0][0] : color[0][1];
-    document.getElementById('heading').style.color = (darktheme) ? color[1][0] : color[1][1];
-    document.getElementById('heading').style.textShadow = (darktheme) ? "3px 5px " + color[2][0] :"3px 5px " + color[2][1];
-    document.getElementsByClassName("description")[0].style.color = (darktheme) ? color[3][0] : color[3][1];
-    document.getElementsByClassName('icon')[0].src = (darktheme) ? "/icons/dark-button.svg" : "/icons/light-button.svg";
-    document.getElementsByClassName('icon')[1].src = (darktheme) ? "/icons/github-dark.svg" : "/icons/github-light.svg";
-    document.getElementsByClassName('icon')[2].src = (darktheme) ? "/icons/email-dark.svg" : "/icons/email-light.svg";
+    const dorl = darktheme ? "dark" : "light";
+    document.getElementById('myCanvas').style.backgroundImage = (darktheme) ? "linear-gradient(" + color[0][0] + "," + color[1][0] + ")" : "linear-gradient(" + color[0][1] + "," + color[1][1] + ")";
+    // document.getElementById('myCanvas').style.backgroundColor = (darktheme) ? color[0][0] : color[0][1]; //Background color
+    document.getElementById('heading').style.color = (darktheme) ? color[2][0] : color[2][1]; //Heading text color
+    document.getElementById('heading').style.textShadow = (darktheme) ? "3px 5px " + color[3][0] :"3px 5px " + color[3][1]; //Heading text shadow color
+    document.getElementsByClassName("description")[0].style.color = (darktheme) ? color[4][0] : color[4][1]; //Description text color
+    document.getElementsByClassName('icon')[0].src = `/icons/${dorl}-button.svg`; //Theme button
+    document.getElementsByClassName('icon')[1].src = `/icons/github-${dorl}.svg`; //Github button
+    document.getElementsByClassName('icon')[2].src = `/icons/email-${dorl}.svg`; //Email Button
 }
 
 window.onresize = reportWindowSize;
